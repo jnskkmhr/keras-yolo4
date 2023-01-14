@@ -5,8 +5,9 @@ import numpy as np
 from keras import backend as K
 from keras.models import load_model
 from keras.layers import Input
+import tensorflow as tf
 
-from yolo4.model import yolo_eval, yolo4_body
+from yolo4.model import yolo_eval, yolo4_body, Mish
 from yolo4.utils import letterbox_image
 
 from PIL import Image, ImageFont, ImageDraw
@@ -173,3 +174,6 @@ if __name__ == '__main__':
     yolo4_model = Yolo4(score, iou, anchors_path, classes_path, model_path, weights_path)
 
     yolo4_model.close_session()
+
+    model = tf.keras.models.load_model('yolo4_weight.h5', custom_objects={'Mish': Mish})
+    tf.saved_model.save(model, 'yolov4')
